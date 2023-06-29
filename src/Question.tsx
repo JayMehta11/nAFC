@@ -3,6 +3,7 @@ import { Box, Button, LinearProgress, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
 import { useLocation, useNavigate } from "react-router-dom";
+import Grid from "@mui/material/Grid";
 
 const questions: any = [];
 
@@ -39,6 +40,7 @@ const questionArrayCreation = () => {
 
 const Question = () => {
   const theme = useTheme();
+  const { state } = useLocation();
 
   const [timer, setTimer] = useState(600); // 10 minutes in secondsf
   const [responses, setResponses] = useState<
@@ -53,32 +55,61 @@ const Question = () => {
       fName6: string;
     }>
   >([]);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(1);
-  const [currentQuestionIndex2, setCurrentQuestionIndex2] = useState(0);
-  const [currentQuestion, setCurrentQuestion]: any = useState({});
+  const conditionalAFC = state.condition;
+  const [currentQuestionIndex1, setCurrentQuestionIndex1] = useState(0);
+  const [currentQuestionIndex2, setCurrentQuestionIndex2] = useState(1);
+  const [currentQuestionIndex3, setCurrentQuestionIndex3] = useState(
+    conditionalAFC === 4 || conditionalAFC === 6 ? 2 : 6
+  );
+  const [currentQuestionIndex4, setCurrentQuestionIndex4] = useState(
+    conditionalAFC === 4 || conditionalAFC === 6 ? 3 : 6
+  );
+  const [currentQuestionIndex5, setCurrentQuestionIndex5] = useState(
+    conditionalAFC === 6 ? 4 : 6
+  );
+  const [currentQuestionIndex6, setCurrentQuestionIndex6] = useState(
+    conditionalAFC === 6 ? 5 : 6
+  );
+  const [currentQuestion1, setCurrentQuestion1]: any = useState({});
   const [currentQuestion2, setCurrentQuestion2]: any = useState({});
+  const [currentQuestion3, setCurrentQuestion3]: any = useState({});
+  const [currentQuestion4, setCurrentQuestion4]: any = useState({});
+  const [currentQuestion5, setCurrentQuestion5]: any = useState({});
+  const [currentQuestion6, setCurrentQuestion6]: any = useState({});
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [ratingcondition, setRatingCondition]: any = useState("");
 
-  const { state } = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log(state.condition);
     questionArrayCreation();
+    console.log(questions);
     setRatingCondition(state.condition);
-
-    // console.log(state.condition,"question array created");
   }, [state.condition]);
 
   useEffect(() => {
-    if (currentQuestionIndex === questions.length - 1) {
-      navigate("/endForm", { state: { ...state, responses: responses } });
+    if (currentQuestionIndex1 === questions.length - conditionalAFC) {
+      navigate("/endForm", {
+        state: {
+          ...state,
+          condition: `${state.condition}AFC`,
+          responses: responses,
+        },
+      });
+      // AFC*queNO --> AFC*queNo + AFC
     } else {
-      setCurrentQuestion(questions[currentQuestionIndex]);
+      setCurrentQuestion1(questions[currentQuestionIndex1]);
+      console.log(questions[currentQuestionIndex1]);
       setCurrentQuestion2(questions[currentQuestionIndex2]);
+      setCurrentQuestion3(questions[currentQuestionIndex3]);
+      setCurrentQuestion4(questions[currentQuestionIndex4]);
+      setCurrentQuestion5(questions[currentQuestionIndex5]);
+      setCurrentQuestion6(questions[currentQuestionIndex6]);
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentQuestionIndex]);
+  }, [currentQuestionIndex1]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -89,29 +120,38 @@ const Question = () => {
 
   useEffect(() => {
     if (timer === 0) {
-      navigate("/endForm", { state: { ...state, ...responses } });
+      navigate("/endForm", {
+        state: {
+          ...state,
+          condition: `${state.condition}AFC`,
+          responses: responses,
+        },
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timer]);
 
   const handleLikeDislike = (action: any) => {
-    if (currentQuestionIndex <= questions.length - 1) {
+    if (currentQuestionIndex1 <= questions.length - 1) {
       const currentTime = (600 - timer) * 1000;
       const response = {
         responseTime: currentTime,
         answer: action,
-        fName1: questions[currentQuestionIndex].image,
+        fName1: questions[currentQuestionIndex1].image,
         fName2: questions[currentQuestionIndex2].image,
-        fName3: "",
-        fName4: "",
-        fName5: "",
-        fName6: "",
+        fName3: questions[currentQuestionIndex3].image,
+        fName4: questions[currentQuestionIndex4].image,
+        fName5: questions[currentQuestionIndex5].image,
+        fName6: questions[currentQuestionIndex6].image,
       };
-      //add image name, user's age, nationality,
       setResponses((prevResponses) => [...prevResponses, response]);
     }
-    setCurrentQuestionIndex((prevIndex) => prevIndex + 2);
-    setCurrentQuestionIndex2((prevIndex) => prevIndex + 2);
+    setCurrentQuestionIndex1((prevIndex) => prevIndex + conditionalAFC);
+    setCurrentQuestionIndex2((prevIndex) => prevIndex + conditionalAFC);
+    setCurrentQuestionIndex3((prevIndex) => prevIndex + conditionalAFC);
+    setCurrentQuestionIndex4((prevIndex) => prevIndex + conditionalAFC);
+    setCurrentQuestionIndex5((prevIndex) => prevIndex + conditionalAFC);
+    setCurrentQuestionIndex6((prevIndex) => prevIndex + conditionalAFC);
   };
 
   const formatTime = (time: number) => {
@@ -121,25 +161,19 @@ const Question = () => {
   };
 
   const calculateProgress = () => {
-    const answeredQuestions = currentQuestionIndex + 2;
+    const answeredQuestions = currentQuestionIndex1 + conditionalAFC;
     const totalQuestions = questions.length;
     return (answeredQuestions / totalQuestions) * 100;
   };
 
-  // const handleRatingChange = (value: any) => {
-  //   if (currentQuestionIndex <= questions.length - 1) {
-  //     const currentTime = (600 - timer) * 1000;
-  //     const response = {
-  //       responseTime: currentTime,
-  //       answer: value,
-  //       imageName: questions[currentQuestionIndex].image,
-  //     };
-  //     //add image name, user's age, nationality,
-  //     setResponses((prevResponses) => [...prevResponses, response]);
-  //   }
-  //   setCurrentQuestionIndex((prevIndex) => prevIndex + 2);
-  //   setCurrentQuestionIndex2((prevIndex) => prevIndex + 2);
-  // };
+  // function range(start: number, stop: number, step = 1) {
+  //   return Array.from(
+  //     { length: Math.ceil((stop - start) / step) },
+  //     (_, i) => start + i * step
+  //   );
+  // }
+  // const imageGrid = range(0, conditionalAFC);
+  // const questionsArray = [{ questions }];
 
   return (
     <Box
@@ -153,47 +187,284 @@ const Question = () => {
       <Typography variant="h4" component="h2" gutterBottom sx={{ mt: 4 }}>
         Question
       </Typography>
-      {/* npx create-react-app my-app --template typescript */}
       <Box
         sx={{
           display: "flex",
           justifyContent: "center",
           mt: 4,
-          flexWrap:'wrap',
+          // flexWrap: { xs: "wrap", sm: "wrap", md: "wrap" },
+          flexWrap: "wrap",
           // flexDirection: theme.breakpoints.only("sm") ? "column" : "row",
           // width: theme.breakpoints.only("sm") ? "50%" : "80%",
           alignItems: "center",
         }}
       >
-        <Button
+        <Box sx={{ flexGrow: 1 }}>
+          <Grid container spacing={1}>
+            <>
+              {(() => {
+                const elements = [];
+                for (
+                  let i = currentQuestionIndex1 * conditionalAFC;
+                  i < currentQuestionIndex1 * conditionalAFC + conditionalAFC;
+                  i++
+                ) // let i = 1 ; i<60;i += conditionalAFC
+                {
+                  elements.push(
+                    // <Grid
+                    //   item
+                    //   xs={
+                    //     conditionalAFC === 2 ? 6 : conditionalAFC === 4 ? 6 : 4
+                    //   }
+                    // >
+                    //   <Button
+                    //     sx={{
+                    //       width: {
+                    //         xs: "200px",
+                    //         sm: "300px",
+                    //         md: "300px",
+                    //         lg: "400px",
+                    //       },
+                    //       height: {
+                    //         xs: "200px",
+                    //         sm: "300px",
+                    //         md: "300px",
+                    //         lg: "400px",
+                    //       },
+                    //       background: "white",
+                    //       border: "1px solid black",
+                    //       "&:hover": { border: "3.5px solid green" },
+                    //       margin: ".5rem",
+                    //     }}
+                    //     onClick={() =>
+                    //       handleLikeDislike(`${questions[i].image}`)
+                    //     }
+                    //   >
+                    //     <img
+                    //       // src={`${questions[i].image}`}
+                    //       src={`/assets/${i+1}.jpg`}
+                    //       alt={`Question ${i}`}
+                    //       style={{
+                    //         // height: 'auto',
+                    //         width: "100%",
+                    //         // border: "1.5px solid black",
+                    //         maxWidth: "100%",
+                    //         maxHeight: "100%",
+                    //         minHeight: "100%",
+                    //         // objectFit: "cover",
+                    //       }}
+                    //     />
+                    //   </Button>
+                    // </Grid>
+                    <p>{i}</p>
+                  );
+                }
+                return elements;
+              })()}
+            </>
+            {/* 
+            <Grid
+              item
+              xs={conditionalAFC === 2 ? 6 : conditionalAFC === 4 ? 6 : 4}
+            >
+              <Button
+                sx={{
+                  width: { xs: "200px", sm: "300px", md: "300px", lg: "400px" },
+                  height: {
+                    xs: "200px",
+                    sm: "300px",
+                    md: "300px",
+                    lg: "400px",
+                  },
+                  background: "white",
+                  border: "1px solid black",
+                  "&:hover": { border: "3.5px solid green" },
+                  margin: ".5rem",
+                }}
+                onClick={() => handleLikeDislike(currentQuestion1.image)}
+              >
+                <img
+                  src={currentQuestion1.image}
+                  alt={`Question ${currentQuestion1.id}`}
+                  style={{
+                    // height: 'auto',
+                    width: "100%",
+                    // border: "1.5px solid black",
+                    maxWidth: "100%",
+                    maxHeight: "100%",
+                    minHeight: "100%",
+                    // objectFit: "cover",
+                  }}
+                />
+              </Button>
+            </Grid>
+            <Grid item xs={4}>
+              <Button
+                sx={{
+                  width: { xs: "200px", sm: "300px", md: "300px", lg: "400px" },
+                  height: {
+                    xs: "200px",
+                    sm: "300px",
+                    md: "300px",
+                    lg: "400px",
+                  },
+                  background: "white",
+                  border: "1px solid black",
+                  "&:hover": { border: "3.5px solid green" },
+                  margin: ".5rem",
+                }}
+                onClick={() => handleLikeDislike(currentQuestion2.image)}
+              >
+                <img
+                  src={currentQuestion2.image}
+                  alt={`Question ${currentQuestion2.id}`}
+                  style={{
+                    // height: 'auto',
+                    width: "100%",
+                    // border: "1.5px solid black",
+                    maxWidth: "100%",
+                    maxHeight: "100%",
+                    minHeight: "100%",
+                    // objectFit: "cover",
+                  }}
+                />
+              </Button>
+            </Grid>
+            <Grid item xs={4}>
+              <Button
+                sx={{
+                  width: { xs: "200px", sm: "300px", md: "300px", lg: "400px" },
+                  height: {
+                    xs: "200px",
+                    sm: "300px",
+                    md: "300px",
+                    lg: "400px",
+                  },
+                  background: "white",
+                  border: "1px solid black",
+                  "&:hover": { border: "3.5px solid green" },
+                  margin: ".5rem",
+                }}
+                onClick={() => handleLikeDislike(currentQuestion3.image)}
+              >
+                <img
+                  src={currentQuestion3.image}
+                  alt={`Question ${currentQuestion3.id}`}
+                  style={{
+                    // height: 'auto',
+                    width: "100%",
+                    // border: "1.5px solid black",
+                    maxWidth: "100%",
+                    maxHeight: "100%",
+                    minHeight: "100%",
+                    // objectFit: "cover",
+                  }}
+                />
+              </Button>
+            </Grid>
+            <Grid item xs={4}>
+              <Button
+                sx={{
+                  width: { xs: "200px", sm: "300px", md: "300px", lg: "400px" },
+                  height: {
+                    xs: "200px",
+                    sm: "300px",
+                    md: "300px",
+                    lg: "400px",
+                  },
+                  background: "white",
+                  border: "1px solid black",
+                  "&:hover": { border: "3.5px solid green" },
+                  margin: ".5rem",
+                }}
+                onClick={() => handleLikeDislike(currentQuestion4.image)}
+              >
+                <img
+                  src={currentQuestion4.image}
+                  alt={`Question ${currentQuestion4.id}`}
+                  style={{
+                    // height: 'auto',
+                    width: "100%",
+                    // border: "1.5px solid black",
+                    maxWidth: "100%",
+                    maxHeight: "100%",
+                    minHeight: "100%",
+                    // objectFit: "cover",
+                  }}
+                />
+              </Button>
+            </Grid>
+            <Grid item xs={4}>
+              <Button
+                sx={{
+                  width: { xs: "200px", sm: "300px", md: "300px", lg: "400px" },
+                  height: {
+                    xs: "200px",
+                    sm: "300px",
+                    md: "300px",
+                    lg: "400px",
+                  },
+                  background: "white",
+                  border: "1px solid black",
+                  "&:hover": { border: "3.5px solid green" },
+                  margin: ".5rem",
+                }}
+                onClick={() => handleLikeDislike(currentQuestion5.image)}
+              >
+                <img
+                  src={currentQuestion5.image}
+                  alt={`Question ${currentQuestion5.id}`}
+                  style={{
+                    // height: 'auto',
+                    width: "100%",
+                    // border: "1.5px solid black",
+                    maxWidth: "100%",
+                    maxHeight: "100%",
+                    minHeight: "100%",
+                    // objectFit: "cover",
+                  }}
+                />
+              </Button>
+            </Grid>
+            <Grid item xs={4}>
+              <Button
+                sx={{
+                  width: { xs: "200px", sm: "300px", md: "300px", lg: "400px" },
+                  height: {
+                    xs: "200px",
+                    sm: "300px",
+                    md: "300px",
+                    lg: "400px",
+                  },
+                  background: "white",
+                  border: "1px solid black",
+                  "&:hover": { border: "3.5px solid green" },
+                  margin: ".5rem",
+                }}
+                onClick={() => handleLikeDislike(currentQuestion6.image)}
+              >
+                <img
+                  src={currentQuestion6.image}
+                  alt={`Question ${currentQuestion6.id}`}
+                  style={{
+                    // height: 'auto',
+                    width: "100%",
+                    // border: "1.5px solid black",
+                    maxWidth: "100%",
+                    maxHeight: "100%",
+                    minHeight: "100%",
+                    // objectFit: "cover",
+                  }}
+                />
+              </Button>
+            </Grid> */}
+          </Grid>
+        </Box>
+
+        {/* <Button
           sx={{
-            width: { xs: "90vw", sm: "300px", lg: "400px" },
-            height: { xs: "90vw", sm: "300px", lg: "400px" },
-            background: "white",
-            border: "1px solid black",
-            "&:hover": { border: "3.5px solid green" },
-            margin: ".5rem",
-          }}
-          onClick={() => handleLikeDislike(currentQuestion2.image)}
-        >
-          <img
-            src={currentQuestion2.image}
-            alt={`Question ${currentQuestion2.id}`}
-            style={{
-              // height: 'auto',
-             
-              width: "100%",
-              // border: "1.5px solid black",
-              maxWidth: "100%",
-              // objectFit: "cover",
-            }}
-          />
-        </Button>
-        <Button
-          sx={{
-            width: { xs: "250px", sm: "300px", lg: "400px" },
-            // height:
-            height: { xs: "90vw", sm: "300px", lg: "400px" },
+            width: { xs: "200px", sm: "300px", md: "300px", lg: "400px" },
+            height: { xs: "200px", sm: "300px", md: "300px", lg: "400px" },
             background: "white",
             border: "1px solid black",
             "&:hover": { border: "3.5px solid green" },
@@ -208,11 +479,113 @@ const Question = () => {
               // height: 400,
               width: "100%",
               maxWidth: "100%",
+              maxHeight: "100%",
+              minHeight: "100%",
               // border: "1.5px solid black",
-              objectFit: "cover",
+              // objectFit: "cover",
             }}
           />
         </Button>
+        <Button
+          sx={{
+            width: { xs: "200px", sm: "300px", md: "300px", lg: "400px" },
+            height: { xs: "200px", sm: "300px", md: "300px", lg: "400px" },
+            background: "white",
+            border: "1px solid black",
+            "&:hover": { border: "3.5px solid green" },
+            margin: ".5rem",
+          }}
+          onClick={() => handleLikeDislike(currentQuestion3.image)}
+        >
+          <img
+            src={currentQuestion3.image}
+            alt={`Question ${currentQuestion3.id}`}
+            style={{
+              // height: 'auto',
+              width: "100%",
+              // border: "1.5px solid black",
+              maxWidth: "100%",
+              maxHeight: "100%",
+              minHeight: "100%",
+              // objectFit: "cover",
+            }}
+          />
+        </Button>
+        <Button
+          sx={{
+            width: { xs: "200px", sm: "300px", md: "300px", lg: "400px" },
+            height: { xs: "200px", sm: "300px", md: "300px", lg: "400px" },
+            background: "white",
+            border: "1px solid black",
+            "&:hover": { border: "3.5px solid green" },
+            margin: ".5rem",
+          }}
+          onClick={() => handleLikeDislike(currentQuestion4.image)}
+        >
+          <img
+            src={currentQuestion4.image}
+            alt={`Question ${currentQuestion4.id}`}
+            style={{
+              // height: 'auto',
+              width: "100%",
+              // border: "1.5px solid black",
+              maxWidth: "100%",
+              maxHeight: "100%",
+              minHeight: "100%",
+              // objectFit: "cover",
+            }}
+          />
+        </Button>
+        <Button
+          sx={{
+            width: { xs: "200px", sm: "300px", md: "300px", lg: "400px" },
+            height: { xs: "200px", sm: "300px", md: "300px", lg: "400px" },
+            background: "white",
+            border: "1px solid black",
+            "&:hover": { border: "3.5px solid green" },
+            margin: ".5rem",
+          }}
+          onClick={() => handleLikeDislike(currentQuestion5.image)}
+        >
+          <img
+            src={currentQuestion5.image}
+            alt={`Question ${currentQuestion5.id}`}
+            style={{
+              // height: 'auto',
+              width: "100%",
+              // border: "1.5px solid black",
+              maxWidth: "100%",
+              maxHeight: "100%",
+              minHeight: "100%",
+              // objectFit: "cover",
+            }}
+          />
+        </Button>
+        <Button
+          sx={{
+            width: { xs: "200px", sm: "300px", md: "300px", lg: "400px" },
+            height: { xs: "200px", sm: "300px", md: "300px", lg: "400px" },
+            background: "white",
+            border: "1px solid black",
+            "&:hover": { border: "3.5px solid green" },
+            margin: ".5rem",
+          }}
+          onClick={() => handleLikeDislike(currentQuestion6.image)}
+        >
+          <img
+            src={currentQuestion6.image}
+            alt={`Question ${currentQuestion6.id}`}
+            style={{
+              // height: 'auto',
+              width: "100%",
+              // border: "1.5px solid black",
+              maxWidth: "100%",
+              maxHeight: "100%",
+              minHeight: "100%",
+              // objectFit: "cover",
+            }}
+          />
+        </Button> */}
       </Box>
       {/* {ratingcondition === "likeDislike" ? (
         <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
