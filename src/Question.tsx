@@ -47,35 +47,36 @@ const Question = () => {
     Array<{
       responseTime: number;
       answer: string;
-      fName1: string;
-      fName2: string;
-      fName3: string;
-      fName4: string;
-      fName5: string;
-      fName6: string;
+      // fName1: string;
+      // fName2: string;
+      // fName3: string;
+      // fName4: string;
+      // fName5: string;
+      // fName6: string;
     }>
   >([]);
   const conditionalAFC = state.condition;
-  const [currentQuestionIndex1, setCurrentQuestionIndex1] = useState(0);
-  const [currentQuestionIndex2, setCurrentQuestionIndex2] = useState(1);
-  const [currentQuestionIndex3, setCurrentQuestionIndex3] = useState(
-    conditionalAFC === 4 || conditionalAFC === 6 ? 2 : 6
-  );
-  const [currentQuestionIndex4, setCurrentQuestionIndex4] = useState(
-    conditionalAFC === 4 || conditionalAFC === 6 ? 3 : 6
-  );
-  const [currentQuestionIndex5, setCurrentQuestionIndex5] = useState(
-    conditionalAFC === 6 ? 4 : 6
-  );
-  const [currentQuestionIndex6, setCurrentQuestionIndex6] = useState(
-    conditionalAFC === 6 ? 5 : 6
-  );
-  const [currentQuestion1, setCurrentQuestion1]: any = useState({});
-  const [currentQuestion2, setCurrentQuestion2]: any = useState({});
-  const [currentQuestion3, setCurrentQuestion3]: any = useState({});
-  const [currentQuestion4, setCurrentQuestion4]: any = useState({});
-  const [currentQuestion5, setCurrentQuestion5]: any = useState({});
-  const [currentQuestion6, setCurrentQuestion6]: any = useState({});
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  // const [currentQuestionIndex1, setCurrentQuestionIndex1] = useState(0);
+  // const [currentQuestionIndex2, setCurrentQuestionIndex2] = useState(1);
+  // const [currentQuestionIndex3, setCurrentQuestionIndex3] = useState(
+  //   conditionalAFC === 4 || conditionalAFC === 6 ? 2 : 6
+  // );
+  // const [currentQuestionIndex4, setCurrentQuestionIndex4] = useState(
+  //   conditionalAFC === 4 || conditionalAFC === 6 ? 3 : 6
+  // );
+  // const [currentQuestionIndex5, setCurrentQuestionIndex5] = useState(
+  //   conditionalAFC === 6 ? 4 : 6
+  // );
+  // const [currentQuestionIndex6, setCurrentQuestionIndex6] = useState(
+  //   conditionalAFC === 6 ? 5 : 6
+  // );
+  // const [currentQuestion1, setCurrentQuestion1]: any = useState({});
+  // const [currentQuestion2, setCurrentQuestion2]: any = useState({});
+  // const [currentQuestion3, setCurrentQuestion3]: any = useState({});
+  // const [currentQuestion4, setCurrentQuestion4]: any = useState({});
+  // const [currentQuestion5, setCurrentQuestion5]: any = useState({});
+  // const [currentQuestion6, setCurrentQuestion6]: any = useState({});
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [ratingcondition, setRatingCondition]: any = useState("");
 
@@ -89,7 +90,7 @@ const Question = () => {
   }, [state.condition]);
 
   useEffect(() => {
-    if (currentQuestionIndex1 === questions.length - conditionalAFC) {
+    if (currentQuestionIndex === questions.length - conditionalAFC) {
       navigate("/endForm", {
         state: {
           ...state,
@@ -98,18 +99,19 @@ const Question = () => {
         },
       });
       // AFC*queNO --> AFC*queNo + AFC
-    } else {
-      setCurrentQuestion1(questions[currentQuestionIndex1]);
-      console.log(questions[currentQuestionIndex1]);
-      setCurrentQuestion2(questions[currentQuestionIndex2]);
-      setCurrentQuestion3(questions[currentQuestionIndex3]);
-      setCurrentQuestion4(questions[currentQuestionIndex4]);
-      setCurrentQuestion5(questions[currentQuestionIndex5]);
-      setCurrentQuestion6(questions[currentQuestionIndex6]);
-    }
+    } 
+    // else {
+    //   setCurrentQuestion1(questions[currentQuestionIndex1]);
+    //   console.log(questions[currentQuestionIndex1]);
+    //   setCurrentQuestion2(questions[currentQuestionIndex2]);
+    //   setCurrentQuestion3(questions[currentQuestionIndex3]);
+    //   setCurrentQuestion4(questions[currentQuestionIndex4]);
+    //   setCurrentQuestion5(questions[currentQuestionIndex5]);
+    //   setCurrentQuestion6(questions[currentQuestionIndex6]);
+    // }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentQuestionIndex1]);
+  }, [currentQuestionIndex]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -132,26 +134,26 @@ const Question = () => {
   }, [timer]);
 
   const handleLikeDislike = (action: any) => {
-    if (currentQuestionIndex1 <= questions.length - 1) {
+    if (currentQuestionIndex <= questions.length - 1) {
       const currentTime = (600 - timer) * 1000;
       const response = {
         responseTime: currentTime,
         answer: action,
-        fName1: questions[currentQuestionIndex1].image,
-        fName2: questions[currentQuestionIndex2].image,
-        fName3: questions[currentQuestionIndex3].image,
-        fName4: questions[currentQuestionIndex4].image,
-        fName5: questions[currentQuestionIndex5].image,
-        fName6: questions[currentQuestionIndex6].image,
+        // fName1: questions[currentQuestionIndex1].image,
+        // fName2: questions[currentQuestionIndex2].image,
+        // fName3: questions[currentQuestionIndex3].image,
+        // fName4: questions[currentQuestionIndex4].image,
+        // fName5: questions[currentQuestionIndex5].image,
+        // fName6: questions[currentQuestionIndex6].image,
       };
       setResponses((prevResponses) => [...prevResponses, response]);
     }
-    setCurrentQuestionIndex1((prevIndex) => prevIndex + conditionalAFC);
-    setCurrentQuestionIndex2((prevIndex) => prevIndex + conditionalAFC);
-    setCurrentQuestionIndex3((prevIndex) => prevIndex + conditionalAFC);
-    setCurrentQuestionIndex4((prevIndex) => prevIndex + conditionalAFC);
-    setCurrentQuestionIndex5((prevIndex) => prevIndex + conditionalAFC);
-    setCurrentQuestionIndex6((prevIndex) => prevIndex + conditionalAFC);
+    setCurrentQuestionIndex((prevIndex) => prevIndex + conditionalAFC);
+    // setCurrentQuestionIndex2((prevIndex) => prevIndex + conditionalAFC);
+    // setCurrentQuestionIndex3((prevIndex) => prevIndex + conditionalAFC);
+    // setCurrentQuestionIndex4((prevIndex) => prevIndex + conditionalAFC);
+    // setCurrentQuestionIndex5((prevIndex) => prevIndex + conditionalAFC);
+    // setCurrentQuestionIndex6((prevIndex) => prevIndex + conditionalAFC);
   };
 
   const formatTime = (time: number) => {
@@ -161,7 +163,7 @@ const Question = () => {
   };
 
   const calculateProgress = () => {
-    const answeredQuestions = currentQuestionIndex1 + conditionalAFC;
+    const answeredQuestions = currentQuestionIndex + conditionalAFC;
     const totalQuestions = questions.length;
     return (answeredQuestions / totalQuestions) * 100;
   };
@@ -199,69 +201,107 @@ const Question = () => {
           alignItems: "center",
         }}
       >
+          <Box>
+            <Grid container spacing={2}>
+              {questions.slice(currentQuestionIndex, currentQuestionIndex + conditionalAFC).map((question:any) => (
+                <Grid item xs={4} key={question.id}>
+                  <Button
+                    sx={{
+                      width: { xs: "200px", sm: "300px", md: "300px", lg: "400px" },
+                      height: {
+                        xs: "200px",
+                        sm: "300px",
+                        md: "300px",
+                        lg: "400px",
+                      },
+                      background: "white",
+                      border: "1px solid black",
+                      "&:hover": { border: "3.5px solid green" },
+                      margin: ".5rem",
+                }}
+                onClick={() => handleLikeDislike(question.image)}
+              >
+                <img
+                  src={question.image}
+                  alt={`Question ${question.id}`}
+                  style={{
+                    // height: 'auto',
+                    width: "100%",
+                    // border: "1.5px solid black",
+                    maxWidth: "100%",
+                    maxHeight: "100%",
+                    minHeight: "100%",
+                    // objectFit: "cover",
+                  }}
+                />
+              </Button>
+                </Grid>
+              ))}
+            </Grid>
+          </Box>
         <Box sx={{ flexGrow: 1 }}>
           <Grid container spacing={1}>
-            <>
+            {/* <>
               {(() => {
                 const elements = [];
                 for (
                   let i = currentQuestionIndex1 * conditionalAFC;
                   i < currentQuestionIndex1 * conditionalAFC + conditionalAFC;
                   i++
-                ) // let i = 1 ; i<60;i += conditionalAFC
+                )
                 {
                   elements.push(
-                    // <Grid
-                    //   item
-                    //   xs={
-                    //     conditionalAFC === 2 ? 6 : conditionalAFC === 4 ? 6 : 4
-                    //   }
-                    // >
-                    //   <Button
-                    //     sx={{
-                    //       width: {
-                    //         xs: "200px",
-                    //         sm: "300px",
-                    //         md: "300px",
-                    //         lg: "400px",
-                    //       },
-                    //       height: {
-                    //         xs: "200px",
-                    //         sm: "300px",
-                    //         md: "300px",
-                    //         lg: "400px",
-                    //       },
-                    //       background: "white",
-                    //       border: "1px solid black",
-                    //       "&:hover": { border: "3.5px solid green" },
-                    //       margin: ".5rem",
-                    //     }}
-                    //     onClick={() =>
-                    //       handleLikeDislike(`${questions[i].image}`)
-                    //     }
-                    //   >
-                    //     <img
-                    //       // src={`${questions[i].image}`}
-                    //       src={`/assets/${i+1}.jpg`}
-                    //       alt={`Question ${i}`}
-                    //       style={{
-                    //         // height: 'auto',
-                    //         width: "100%",
-                    //         // border: "1.5px solid black",
-                    //         maxWidth: "100%",
-                    //         maxHeight: "100%",
-                    //         minHeight: "100%",
-                    //         // objectFit: "cover",
-                    //       }}
-                    //     />
-                    //   </Button>
-                    // </Grid>
-                    <p>{i}</p>
+                    <Grid
+                      item
+                      xs={
+                        conditionalAFC === 2 ? 6 : conditionalAFC === 4 ? 6 : 4
+                      }
+                    >
+                      <Button
+                        sx={{
+                          width: {
+                            xs: "200px",
+                            sm: "300px",
+                            md: "300px",
+                            lg: "400px",
+                          },
+                          height: {
+                            xs: "200px",
+                            sm: "300px",
+                            md: "300px",
+                            lg: "400px",
+                          },
+                          background: "white",
+                          border: "1px solid black",
+                          "&:hover": { border: "3.5px solid green" },
+                          margin: ".5rem",
+                        }}
+                        onClick={() =>
+                          handleLikeDislike(`${questions[i].image}`)
+                        }
+                      >
+                        <img
+                          // src={`${questions[i].image}`}
+                          src={`/assets/${i+1}.jpg`}
+                          alt={`Question ${i}`}
+                          style={{
+                            // height: 'auto',
+                            width: "100%",
+                            // border: "1.5px solid black",
+                            maxWidth: "100%",
+                            maxHeight: "100%",
+                            minHeight: "100%",
+                            // objectFit: "cover",
+                          }}
+                        />
+                      </Button>
+                    </Grid>
+                   
                   );
                 }
                 return elements;
               })()}
-            </>
+            </> */}
             {/* 
             <Grid
               item
