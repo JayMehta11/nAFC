@@ -5,7 +5,7 @@ import { useLocation } from "react-router-dom";
 const End = () => {
   const { state } = useLocation();
   useEffect(() => {
-    console.log(state);
+    console.log(state,"Response Object");
   }, [state]);
 
   return (
