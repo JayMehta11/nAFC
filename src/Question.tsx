@@ -188,7 +188,7 @@ const Question = () => {
       >
         <Grid
           container
-          spacing={4}
+          spacing={6}
           sx={{
             flexWrap: { sm: "wrap", md: "wrap" },
           }}
