@@ -153,11 +153,11 @@ const Question = () => {
           alignItems: "center",
           position: "relative",
           width: "100%",
-          mt:4,
+          mt:1,
         }}
       >
         <Typography variant="h4" component="h2">
-          Question
+          Select The Image You Like!
         </Typography>
         <Box
           sx={{
@@ -178,7 +178,7 @@ const Question = () => {
         sx={{
           display: "flex",
           justifyContent: "center",
-          mt: 2,
+          m: 1,
           width:
             conditionalAFC === 2 ? { xs: "100%", sm: "80%", md: "70%", lg:'80%' } :
             conditionalAFC === 4 ? { xs: "100%", sm: "80%", md: "60%", lg:'50%' } : 
@@ -192,7 +192,7 @@ const Question = () => {
           spacing={6}
           sx={{
             flexWrap: { sm: "wrap", md: "wrap" },
-            m: 2,
+            // m: 2,
           }}
         >
           {questions
