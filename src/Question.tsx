@@ -47,14 +47,21 @@ const Question = () => {
     Array<{
       responseTime: number;
       answer: string;
-      // fName1: string;
-      // fName2: string;
-      // fName3: string;
-      // fName4: string;
-      // fName5: string;
-      // fName6: string;
+      fName1?: string;
+      fName2?: string;
+      fName3?: string;
+      fName4?: string;
+      fName5?: string;
+      fName6?: string;
     }>
   >([]);
+//   const [responses, setResponses] = useState<
+//   Array<{
+//     responseTime: number;
+//     answer: string;
+//     imagePaths: Record<string, string>;
+//   }>
+// >([]);
   const conditionalAFC = state.condition;
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   // const [currentQuestionIndex1, setCurrentQuestionIndex1] = useState(0);
@@ -85,7 +92,7 @@ const Question = () => {
   useEffect(() => {
     console.log(state.condition);
     questionArrayCreation();
-    console.log(questions);
+    // console.log(questions);
     setRatingCondition(state.condition);
   }, [state.condition]);
 
@@ -132,19 +139,21 @@ const Question = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timer]);
-
+  
+  
   const handleLikeDislike = (action: any) => {
+    // console.log(action,currentQuestionIndex)
     if (currentQuestionIndex <= questions.length - 1) {
       const currentTime = (600 - timer) * 1000;
       const response = {
         responseTime: currentTime,
-        answer: action,
-        // fName1: questions[currentQuestionIndex1].image,
-        // fName2: questions[currentQuestionIndex2].image,
-        // fName3: questions[currentQuestionIndex3].image,
-        // fName4: questions[currentQuestionIndex4].image,
-        // fName5: questions[currentQuestionIndex5].image,
-        // fName6: questions[currentQuestionIndex6].image,
+        answer: currentQuestionIndex+1===action ? "fName1" : currentQuestionIndex+2===action ? "fName2" : currentQuestionIndex+3===action ? "fName3" : currentQuestionIndex+4===action ? "fName4" : currentQuestionIndex+5===action ? "fName5" : "fName6",
+        fName1: questions[currentQuestionIndex].image,
+        fName2: questions[currentQuestionIndex + 1].image,
+        fName3: conditionalAFC>2 ? questions[currentQuestionIndex+2].image : "",
+        fName4: conditionalAFC>2 ? questions[currentQuestionIndex+3].image : "",
+        fName5: conditionalAFC>4 ? questions[currentQuestionIndex+4].image : "",
+        fName6: conditionalAFC>4 ? questions[currentQuestionIndex+5].image : "",
       };
       setResponses((prevResponses) => [...prevResponses, response]);
     }
@@ -163,7 +172,7 @@ const Question = () => {
   };
 
   const calculateProgress = () => {
-    const answeredQuestions = currentQuestionIndex + conditionalAFC;
+    const answeredQuestions = currentQuestionIndex;
     const totalQuestions = questions.length;
     return (answeredQuestions / totalQuestions) * 100;
   };
@@ -183,6 +192,7 @@ const Question = () => {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
+        textAlign: "center",
         // mt: 2,
       }}
     >
@@ -195,46 +205,61 @@ const Question = () => {
           justifyContent: "center",
           mt: 4,
           // flexWrap: { xs: "wrap", sm: "wrap", md: "wrap" },
-          flexWrap: "wrap",
+          // flexWrap: "wrap",
           // flexDirection: theme.breakpoints.only("sm") ? "column" : "row",
           // width: theme.breakpoints.only("sm") ? "50%" : "80%",
           alignItems: "center",
         }}
       >
           <Box>
-            <Grid container spacing={2}>
-              {questions.slice(currentQuestionIndex, currentQuestionIndex + conditionalAFC).map((question:any) => (
-                <Grid item xs={4} key={question.id}>
+            <Grid container spacing={1} sx={{
+              flexGrow: 1,
+              display: "flex",
+              flexWrap: { sm: "wrap", md: "wrap" },
+              m:2,
+            }}>
+            {questions
+              .slice(
+                currentQuestionIndex,
+                currentQuestionIndex + conditionalAFC
+              )
+              .map((question: any, i: any) => (
+                <Grid item xs={6} sm={6} md={6} lg={6} key={question.id}>
                   <Button
                     sx={{
-                      width: { xs: "200px", sm: "300px", md: "300px", lg: "400px" },
+                      // display: "flex",
+                      // marginLeft: {xs:"5rem"},
+                      // justifyContent:'center',
+                      width: {
+                        xs: "150px",
+                        sm: "200px",
+                        md: "200px",
+                        lg: "200px",
+                      },
                       height: {
-                        xs: "200px",
-                        sm: "300px",
-                        md: "300px",
-                        lg: "400px",
+                        xs: "150px",
+                        sm: "200px",
+                        md: "200px",
+                        lg: "200px",
                       },
                       background: "white",
                       border: "1px solid black",
                       "&:hover": { border: "3.5px solid green" },
-                      margin: ".5rem",
-                }}
-                onClick={() => handleLikeDislike(question.image)}
-              >
-                <img
-                  src={question.image}
-                  alt={`Question ${question.id}`}
-                  style={{
-                    // height: 'auto',
-                    width: "100%",
-                    // border: "1.5px solid black",
-                    maxWidth: "100%",
-                    maxHeight: "100%",
-                    minHeight: "100%",
-                    // objectFit: "cover",
-                  }}
-                />
-              </Button>
+                    }}
+                    onClick={() => handleLikeDislike(question.id)}
+                  >
+                    <img
+                      src={question.image}
+                      alt={`Question ${question.id}`}
+                      style={{
+                        minWidth: "100%",
+                        maxWidth: "100%",
+                        maxHeight: "100%",
+                        minHeight: "100%",
+                        // objectFit: "cover",
+                      }}
+                    />
+                  </Button>
                 </Grid>
               ))}
             </Grid>

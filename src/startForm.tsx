@@ -66,7 +66,7 @@ const Forms = () => {
   const handleSelectChange = (event: any) => {
     setNationality(event.target.value);
   };
-  const numbers = [2, 4, 6];
+  const numbers = [6, 2, 4,];
   // Randomly select an integer from the array
   const randomIndex = Math.floor(Math.random() * numbers.length);
   const nAFC = numbers[randomIndex];
