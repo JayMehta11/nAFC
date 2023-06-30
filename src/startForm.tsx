@@ -157,8 +157,7 @@ const Forms = () => {
             ))}
           </Select>
         </FormControl>
-        {age 
-        // && gender && nationality && education 
+        {age && gender && nationality && education 
         ? (
           <Button
             sx={{ mt: 2, fontWeight: 700 }}
