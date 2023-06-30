@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react';
-import { Box, Button, LinearProgress, Typography } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
+import { useEffect, useState } from "react";
+import { Box, Button, LinearProgress, Typography } from "@mui/material";
 
-import { useLocation, useNavigate } from 'react-router-dom';
-import Grid from '@mui/material/Grid';
+import { useLocation, useNavigate } from "react-router-dom";
+import Grid from "@mui/material/Grid";
 
 const questions: any = [];
 
@@ -39,7 +38,6 @@ const questionArrayCreation = () => {
 //3-60
 
 const Question = () => {
-  const theme = useTheme();
   const { state } = useLocation();
 
   const [timer, setTimer] = useState(600); // 10 minutes in secondsf
@@ -85,7 +83,7 @@ const Question = () => {
   // const [currentQuestion5, setCurrentQuestion5]: any = useState({});
   // const [currentQuestion6, setCurrentQuestion6]: any = useState({});
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [ratingcondition, setRatingCondition]: any = useState('');
+  const [ratingcondition, setRatingCondition]: any = useState("");
 
   const navigate = useNavigate();
 
@@ -98,7 +96,7 @@ const Question = () => {
 
   useEffect(() => {
     if (currentQuestionIndex === questions.length - conditionalAFC) {
-      navigate('/endForm', {
+      navigate("/endForm", {
         state: {
           ...state,
           condition: `${state.condition}AFC`,
@@ -129,7 +127,7 @@ const Question = () => {
 
   useEffect(() => {
     if (timer === 0) {
-      navigate('/endForm', {
+      navigate("/endForm", {
         state: {
           ...state,
           condition: `${state.condition}AFC`,
@@ -148,26 +146,26 @@ const Question = () => {
         responseTime: currentTime,
         answer:
           currentQuestionIndex + 1 === action
-            ? 'fName1'
+            ? "fName1"
             : currentQuestionIndex + 2 === action
-            ? 'fName2'
+            ? "fName2"
             : currentQuestionIndex + 3 === action
-            ? 'fName3'
+            ? "fName3"
             : currentQuestionIndex + 4 === action
-            ? 'fName4'
+            ? "fName4"
             : currentQuestionIndex + 5 === action
-            ? 'fName5'
-            : 'fName6',
+            ? "fName5"
+            : "fName6",
         fName1: questions[currentQuestionIndex].image,
         fName2: questions[currentQuestionIndex + 1].image,
         fName3:
-          conditionalAFC > 2 ? questions[currentQuestionIndex + 2].image : '',
+          conditionalAFC > 2 ? questions[currentQuestionIndex + 2].image : "",
         fName4:
-          conditionalAFC > 2 ? questions[currentQuestionIndex + 3].image : '',
+          conditionalAFC > 2 ? questions[currentQuestionIndex + 3].image : "",
         fName5:
-          conditionalAFC > 4 ? questions[currentQuestionIndex + 4].image : '',
+          conditionalAFC > 4 ? questions[currentQuestionIndex + 4].image : "",
         fName6:
-          conditionalAFC > 4 ? questions[currentQuestionIndex + 5].image : '',
+          conditionalAFC > 4 ? questions[currentQuestionIndex + 5].image : "",
       };
       setResponses((prevResponses) => [...prevResponses, response]);
     }
@@ -182,7 +180,7 @@ const Question = () => {
   const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
-    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
   };
 
   const calculateProgress = () => {
@@ -203,34 +201,34 @@ const Question = () => {
   return (
     <Box
       sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        textAlign: 'center',
-        p:2
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        textAlign: "center",
+        p: 1,
         // mt: 2,
       }}
     >
       <Box
         sx={{
-          display: 'flex',
-          justifyContent: {xs:'left', sm:'center'},
-          alignItems:'center',
-          p: 1,
-          position:'relative',
-          width:'100%'
+          display: "flex",
+          justifyContent: { xs: "left", sm: "center" },
+          alignItems: "center",
+          // p: .5,
+          position: "relative",
+          width: "100%",
         }}
       >
-        <Typography variant="h4" component="h2" >
+        <Typography variant="h4" component="h2">
           Question
         </Typography>
         <Box
           sx={{
             borderRadius: 4,
-            padding:'0.25rem 1rem',
-            position: 'absolute',
-            right:0,
-            backgroundColor: 'lightgray',
+            padding: "0.25rem .5rem",
+            position: "absolute",
+            right: 0,
+            backgroundColor: "lightgray",
           }}
         >
           <Typography variant="body1" sx={{ fontSize: 26 }}>
@@ -241,53 +239,92 @@ const Question = () => {
 
       <Box
         sx={{
-          display: 'flex',
-          justifyContent: 'center',
+          display: "flex",
+          justifyContent: "center",
           mt: 4,
-          width:'100%',
-          // flexWrap: { xs: "wrap", sm: "wrap", md: "wrap" },
-          // flexWrap: "wrap",
-          // flexDirection: theme.breakpoints.only("sm") ? "column" : "row",
-          // width: theme.breakpoints.only("sm") ? "50%" : "80%",
-          alignItems: 'center',
+          width: "100%",
+
+          alignItems: "center",
         }}
       >
         <Grid
           container
           spacing={1}
           sx={{
-            // flexGrow: 1,
-            // display: 'flex',
-            flexWrap: { sm: 'wrap', md: 'wrap' },
+            flexWrap: { sm: "wrap", md: "wrap" },
             m: 2,
-            backgroundColor: 'lightgrey',
           }}
         >
           {questions
             .slice(currentQuestionIndex, currentQuestionIndex + conditionalAFC)
             .map((question: any, i: any) => (
-              <Grid item xs={6} sm={6} md={6} lg={6} key={question.id} sx={{border:'1px solid black'}}>
+              <Grid
+                item
+                xs={6}
+                sm={6}
+                md={6}
+                lg={conditionalAFC === 6 ? 4 : 6}
+                key={question.id}
+              >
                 <Button
                   sx={{
-                    // display: "flex",
-                    // marginLeft: {xs:"5rem"},
-                    // justifyContent:'center',
+                    
                     width: {
-                      xs: '150px',
-                      sm: '200px',
-                      md: '200px',
-                      lg: '500px',
+                      xs:
+                        conditionalAFC === 6
+                          ? "160px"
+                          : conditionalAFC === 4
+                          ? "160px"
+                          : "160px",
+                      sm:
+                        conditionalAFC === 6
+                          ? "200px"
+                          : conditionalAFC === 4
+                          ? "250px"
+                          : "280px",
+                      md:
+                        conditionalAFC === 6
+                          ? "200px"
+                          : conditionalAFC === 4
+                          ? "300px"
+                          : "400px",
+                      lg:
+                        conditionalAFC === 6
+                          ? "300px"
+                          : conditionalAFC === 4
+                          ? "300px"
+                          : "500px",
                     },
                     height: {
-                      xs: '150px',
-                      sm: '200px',
-                      md: '200px',
-                      lg: '500px',
+                      xs:
+                        conditionalAFC === 6
+                          ? "160px"
+                          : conditionalAFC === 4
+                          ? "160px"
+                          : "160px",
+                      sm:
+                        conditionalAFC === 6
+                          ? "200px"
+                          : conditionalAFC === 4
+                          ? "250px"
+                          : "280px",
+                      md:
+                        conditionalAFC === 6
+                          ? "200px"
+                          : conditionalAFC === 4
+                          ? "300px"
+                          : "400px",
+                      lg:
+                        conditionalAFC === 6
+                          ? "300px"
+                          : conditionalAFC === 4
+                          ? "300px"
+                          : "500px",
                     },
-                    background: 'white',
-                    border: '1px solid black',
-                    transition: 'box-shadow 0.1s ease-in-out',
-                    '&:hover': {
+                    background: "white",
+                    border: "1px solid black",
+                    transition: "box-shadow 0.1s ease-in-out",
+                    "&:hover": {
                       boxShadow: `0px 0px 2px 2px green`,
                     },
                   }}
@@ -297,10 +334,10 @@ const Question = () => {
                     src={question.image}
                     alt={`Question ${question.id}`}
                     style={{
-                      minWidth: '100%',
-                      maxWidth: '100%',
-                      maxHeight: '100%',
-                      minHeight: '100%',
+                      minWidth: "100%",
+                      maxWidth: "100%",
+                      maxHeight: "100%",
+                      minHeight: "100%",
                       // objectFit: "cover",
                     }}
                   />
@@ -504,7 +541,7 @@ const Question = () => {
       <LinearProgress
         variant="determinate"
         value={calculateProgress()}
-        sx={{ mt: 2, width: '50%', height: '.5rem' }}
+        sx={{ mt: 2, width: "50%", height: ".5rem" }}
       />
     </Box>
   );
