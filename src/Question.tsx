@@ -153,6 +153,7 @@ const Question = () => {
           alignItems: "center",
           position: "relative",
           width: "100%",
+          mt:4,
         }}
       >
         <Typography variant="h4" component="h2">
@@ -163,7 +164,7 @@ const Question = () => {
             borderRadius: 4,
             padding: "0.25rem .5rem",
             position: "absolute",
-            right: 0,
+            right: 10,
             backgroundColor: "lightgray",
           }}
         >
@@ -179,14 +180,16 @@ const Question = () => {
           justifyContent: "center",
           mt: 2,
           width:
-            conditionalAFC === 4 ? { xs: "100%", sm: "80%", md: "60%" } : "80%",
+            conditionalAFC === 2 ? { xs: "100%", sm: "80%", md: "70%", lg:'80%' } :
+            conditionalAFC === 4 ? { xs: "100%", sm: "80%", md: "60%", lg:'50%' } : 
+            { xs: "100%", sm: "80%", md: "80%", lg:'80%' } ,
 
           alignItems: "center",
         }}
       >
         <Grid
           container
-          spacing={1}
+          spacing={6}
           sx={{
             flexWrap: { sm: "wrap", md: "wrap" },
             m: 2,
