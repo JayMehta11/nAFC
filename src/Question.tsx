@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Box, Button, LinearProgress, Typography } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
 
 import { useLocation, useNavigate } from "react-router-dom";
+import Grid from "@mui/material/Grid";
 
 const questions: any = [];
 
@@ -27,56 +27,47 @@ const questionArrayCreation = () => {
   }
 };
 
-//random no. without permutation
-
-//array - []
-//shuffle = random permutation
-
-//1 2 3 4 5 6 7 8
-//8*7*6*5*4*3*2*1
-//1-60
-//3-60
-
 const Question = () => {
-  const theme = useTheme();
+  const { state } = useLocation();
 
   const [timer, setTimer] = useState(600); // 10 minutes in secondsf
   const [responses, setResponses] = useState<
     Array<{
       responseTime: number;
       answer: string;
-      fName1: string;
-      fName2: string;
-      fName3: string;
-      fName4: string;
-      fName5: string;
-      fName6: string;
+      fName1?: string;
+      fName2?: string;
+      fName3?: string;
+      fName4?: string;
+      fName5?: string;
+      fName6?: string;
     }>
   >([]);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(1);
-  const [currentQuestionIndex2, setCurrentQuestionIndex2] = useState(0);
-  const [currentQuestion, setCurrentQuestion]: any = useState({});
-  const [currentQuestion2, setCurrentQuestion2]: any = useState({});
+
+  const conditionalAFC = state.condition;
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [ratingcondition, setRatingCondition]: any = useState("");
 
-  const { state } = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
     questionArrayCreation();
     setRatingCondition(state.condition);
-
-    // console.log(state.condition,"question array created");
   }, [state.condition]);
 
   useEffect(() => {
-    if (currentQuestionIndex === questions.length - 1) {
-      navigate("/endForm", { state: { ...state, responses: responses } });
-    } else {
-      setCurrentQuestion(questions[currentQuestionIndex]);
-      setCurrentQuestion2(questions[currentQuestionIndex2]);
+    if (currentQuestionIndex === questions.length - conditionalAFC) {
+      navigate("/endForm", {
+        state: {
+          ...state,
+          condition: `${state.condition}AFC`,
+          responses: responses,
+        },
+      });
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentQuestionIndex]);
 
@@ -89,7 +80,13 @@ const Question = () => {
 
   useEffect(() => {
     if (timer === 0) {
-      navigate("/endForm", { state: { ...state, ...responses } });
+      navigate("/endForm", {
+        state: {
+          ...state,
+          condition: `${state.condition}AFC`,
+          responses: responses,
+        },
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timer]);
@@ -99,19 +96,32 @@ const Question = () => {
       const currentTime = (600 - timer) * 1000;
       const response = {
         responseTime: currentTime,
-        answer: action,
+        answer:
+          currentQuestionIndex + 1 === action
+            ? "fName1"
+            : currentQuestionIndex + 2 === action
+            ? "fName2"
+            : currentQuestionIndex + 3 === action
+            ? "fName3"
+            : currentQuestionIndex + 4 === action
+            ? "fName4"
+            : currentQuestionIndex + 5 === action
+            ? "fName5"
+            : "fName6",
         fName1: questions[currentQuestionIndex].image,
-        fName2: questions[currentQuestionIndex2].image,
-        fName3: "",
-        fName4: "",
-        fName5: "",
-        fName6: "",
+        fName2: questions[currentQuestionIndex + 1].image,
+        fName3:
+          conditionalAFC > 2 ? questions[currentQuestionIndex + 2].image : "",
+        fName4:
+          conditionalAFC > 2 ? questions[currentQuestionIndex + 3].image : "",
+        fName5:
+          conditionalAFC > 4 ? questions[currentQuestionIndex + 4].image : "",
+        fName6:
+          conditionalAFC > 4 ? questions[currentQuestionIndex + 5].image : "",
       };
-      //add image name, user's age, nationality,
       setResponses((prevResponses) => [...prevResponses, response]);
     }
-    setCurrentQuestionIndex((prevIndex) => prevIndex + 2);
-    setCurrentQuestionIndex2((prevIndex) => prevIndex + 2);
+    setCurrentQuestionIndex((prevIndex) => prevIndex + conditionalAFC);
   };
 
   const formatTime = (time: number) => {
@@ -121,25 +131,10 @@ const Question = () => {
   };
 
   const calculateProgress = () => {
-    const answeredQuestions = currentQuestionIndex + 2;
+    const answeredQuestions = currentQuestionIndex;
     const totalQuestions = questions.length;
     return (answeredQuestions / totalQuestions) * 100;
   };
-
-  // const handleRatingChange = (value: any) => {
-  //   if (currentQuestionIndex <= questions.length - 1) {
-  //     const currentTime = (600 - timer) * 1000;
-  //     const response = {
-  //       responseTime: currentTime,
-  //       answer: value,
-  //       imageName: questions[currentQuestionIndex].image,
-  //     };
-  //     //add image name, user's age, nationality,
-  //     setResponses((prevResponses) => [...prevResponses, response]);
-  //   }
-  //   setCurrentQuestionIndex((prevIndex) => prevIndex + 2);
-  //   setCurrentQuestionIndex2((prevIndex) => prevIndex + 2);
-  // };
 
   return (
     <Box
@@ -147,72 +142,144 @@ const Question = () => {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        // mt: 2,
+        textAlign: "center",
+        p: 1,
       }}
     >
-      <Typography variant="h4" component="h2" gutterBottom sx={{ mt: 4 }}>
-        Question
-      </Typography>
-      {/* npx create-react-app my-app --template typescript */}
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: { xs: "left", sm: "center" },
+          alignItems: "center",
+          position: "relative",
+          width: "100%",
+        }}
+      >
+        <Typography variant="h4" component="h2">
+          Question
+        </Typography>
+        <Box
+          sx={{
+            borderRadius: 4,
+            padding: "0.25rem .5rem",
+            position: "absolute",
+            right: 0,
+            backgroundColor: "lightgray",
+          }}
+        >
+          <Typography variant="body1" sx={{ fontSize: 26 }}>
+            {formatTime(timer)}
+          </Typography>
+        </Box>
+      </Box>
+
       <Box
         sx={{
           display: "flex",
           justifyContent: "center",
-          mt: 4,
-          flexWrap:'wrap',
-          // flexDirection: theme.breakpoints.only("sm") ? "column" : "row",
-          // width: theme.breakpoints.only("sm") ? "50%" : "80%",
+          mt: 2,
+          width:
+            conditionalAFC === 4 ? { xs: "100%", sm: "80%", md: "60%" } : "80%",
+
           alignItems: "center",
         }}
       >
-        <Button
+        <Grid
+          container
+          spacing={1}
           sx={{
-            width: { xs: "90vw", sm: "300px", lg: "400px" },
-            height: { xs: "90vw", sm: "300px", lg: "400px" },
-            background: "white",
-            border: "1px solid black",
-            "&:hover": { border: "3.5px solid green" },
-            margin: ".5rem",
+            flexWrap: { sm: "wrap", md: "wrap" },
+            m: 2,
           }}
-          onClick={() => handleLikeDislike(currentQuestion2.image)}
         >
-          <img
-            src={currentQuestion2.image}
-            alt={`Question ${currentQuestion2.id}`}
-            style={{
-              // height: 'auto',
-             
-              width: "100%",
-              // border: "1.5px solid black",
-              maxWidth: "100%",
-              // objectFit: "cover",
-            }}
-          />
-        </Button>
-        <Button
-          sx={{
-            width: { xs: "250px", sm: "300px", lg: "400px" },
-            // height:
-            height: { xs: "90vw", sm: "300px", lg: "400px" },
-            background: "white",
-            border: "1px solid black",
-            "&:hover": { border: "3.5px solid green" },
-            margin: ".5rem",
-          }}
-          onClick={() => handleLikeDislike(currentQuestion.image)}
-        >
-          <img
-            src={currentQuestion.image}
-            alt={`Question ${currentQuestion.id}`}
-            style={{
-              // height: 400,
-              width: "100%",
-              maxWidth: "100%",
-              // border: "1.5px solid black",
-              objectFit: "cover",
-            }}
-          />
-        </Button>
+          {questions
+            .slice(currentQuestionIndex, currentQuestionIndex + conditionalAFC)
+            .map((question: any, i: any) => (
+              <Grid
+                item
+                xs={conditionalAFC === 2 ? 12 : 6}
+                sm={6}
+                md={6}
+                lg={conditionalAFC === 6 ? 4 : 6}
+                key={question.id}
+              >
+                <Button
+                  sx={{
+                    width: {
+                      xs:
+                        conditionalAFC === 6
+                          ? "120px"
+                          : conditionalAFC === 4
+                          ? "140px"
+                          : "200px",
+                      sm:
+                        conditionalAFC === 6
+                          ? "200px"
+                          : conditionalAFC === 4
+                          ? "200px"
+                          : "200px",
+                      md:
+                        conditionalAFC === 6
+                          ? "200px"
+                          : conditionalAFC === 4
+                          ? "240px"
+                          : "320px",
+                      lg:
+                        conditionalAFC === 6
+                          ? "300px"
+                          : conditionalAFC === 4
+                          ? "300px"
+                          : "450px",
+                    },
+                    height: {
+                      xs:
+                        conditionalAFC === 6
+                          ? "120px"
+                          : conditionalAFC === 4
+                          ? "140px"
+                          : "200px",
+                      sm:
+                        conditionalAFC === 6
+                          ? "200px"
+                          : conditionalAFC === 4
+                          ? "200px"
+                          : "200px",
+                      md:
+                        conditionalAFC === 6
+                          ? "200px"
+                          : conditionalAFC === 4
+                          ? "240px"
+                          : "320px",
+                      lg:
+                        conditionalAFC === 6
+                          ? "300px"
+                          : conditionalAFC === 4
+                          ? "300px"
+                          : "450px",
+                    },
+                    background: "white",
+                    border: "1px solid black",
+                    transition: "box-shadow 0.1s ease-in-out",
+                    "&:hover": {
+                      boxShadow: `0px 0px 2px 2px green`,
+                    },
+                  }}
+                  onClick={() => handleLikeDislike(question.id)}
+                >
+                  <img
+                    src={question.image}
+                    alt={`Question ${question.id}`}
+                    style={{
+                      minWidth: "100%",
+                      maxWidth: "100%",
+                      maxHeight: "100%",
+                      minHeight: "100%",
+                    }}
+                  />
+                </Button>
+              </Grid>
+            ))}
+        </Grid>
       </Box>
       {/* {ratingcondition === "likeDislike" ? (
         <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
@@ -274,23 +341,6 @@ const Question = () => {
         </Box>
       )} */}
 
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "flex-end",
-          alignItems: "center",
-          position: "fixed",
-          top: 20,
-          right: theme.breakpoints.down("md") ? 25 : 100,
-          p: 1,
-          backgroundColor: "lightgray",
-          borderRadius: 4,
-        }}
-      >
-        <Typography variant="body1" sx={{ fontSize: 26 }}>
-          {formatTime(timer)}
-        </Typography>
-      </Box>
       {/* <Box sx={{ display: 'flex', alignItems: 'center', mt: 4, width: '80%' }}>
         <CircularProgress variant="determinate" value={timer / 60} size={96} thickness={4} />
         <Typography variant="body1" component="span" sx={{ ml: 2, fontSize: 20 }}>

@@ -14,8 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Link } from "react-router-dom";
-import { v4 as uuidv4 } from 'uuid';
-
+import { v4 as uuidv4 } from "uuid";
 
 interface Country {
   text: string;
@@ -30,11 +29,11 @@ const Forms = () => {
   // const [myData, setMyData] = React.useState([{}]);
   const [countries, setCountries] = useState<Country[]>([]);
   // const [selectedCountry, setSelectedCountry] = useState("");
-  const [ratingcondition, setRatingCondition]: any = useState("");
+  // const [ratingcondition, setRatingCondition]: any = useState("");
   const [timestamp, setTimestamp] = useState("");
 
   useEffect(() => {
-    setRatingCondition(Math.random() < 0.5 ? "likeDislike" : "ratings");
+    // setRatingCondition(Math.random() < 0.5 ? "likeDislike" : "ratings");
     // setTimestamp(new Date().toLocaleString())
     const options = {
       year: "numeric",
@@ -52,17 +51,6 @@ const Forms = () => {
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-
-    // const formData = {
-    //   age,
-    //   gender,
-    //   education,
-    //   nationality,
-    //   ratingcondition,
-    //   timestamp: new Date().toUTCString(),
-    //   sessionId: uuidv4(),
-    // };
-    // console.log(formData);
   };
   const fetchData = async () => {
     try {
@@ -78,6 +66,12 @@ const Forms = () => {
   const handleSelectChange = (event: any) => {
     setNationality(event.target.value);
   };
+  const numbers = [6, 2, 4,];
+  // Randomly select an integer from the array
+  const randomIndex = Math.floor(Math.random() * numbers.length);
+  const nAFC = numbers[randomIndex];
+  // Output the randomly selected integer
+  // console.log(randomInteger,'INT');
 
   useEffect(() => {
     fetchData();
@@ -163,7 +157,9 @@ const Forms = () => {
             ))}
           </Select>
         </FormControl>
-        {age && gender && nationality && education ? (
+        {age 
+        // && gender && nationality && education 
+        ? (
           <Button
             sx={{ mt: 2, fontWeight: 700 }}
             variant="contained"
@@ -174,9 +170,10 @@ const Forms = () => {
               gender: gender,
               education: education,
               nationality: nationality,
-              condition: ratingcondition,
+              // condition: ratingcondition,
               timestamp: timestamp,
               sessionId: uuidv4(),
+              condition: nAFC,
             }}
             color="primary"
             type="submit"
